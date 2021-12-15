@@ -1,0 +1,36 @@
+USER admins
+	
+HOLDER 4
+NAME 2112091450-4-4-admin
+SOLVENT DMSO
+NO_SUBMIT
+
+
+
+EXPNO 10
+
+EXPERIMENT proton.a.and
+TITLE test priority || 1H Observe
+
+
+
+EXPNO 11
+
+EXPERIMENT f19cpd.a.and
+TITLE test priority || 19F Observe with 1H decoupling - Full Range SW
+
+
+
+EXPNO 12
+
+EXPERIMENT f19cpd_80ppm.a.and
+TITLE test priority || 19F Observe with 1H decoupling - SW 80 ppm
+
+
+
+EXPNO 13
+
+EXPERIMENT ghsqc-ed.a.and
+TITLE test priority || 2D 1H,13C-gs-HSQC with multiplicity editing
+		
+END

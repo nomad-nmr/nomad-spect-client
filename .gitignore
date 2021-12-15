@@ -2,5 +2,5 @@
 /node_modules
 /status_files
 /status-save
-/submission
+/submit_files
 src/config/config.json

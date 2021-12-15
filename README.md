@@ -2,10 +2,10 @@ Javascript code app that runs on NMR spectrometer PC in Node.js runtime environm
 
 ## Starting scripts
 
-- **npm start** starts the app
-- **npm run config** starts app configuration
-- **npm run list** shows app configuration
-- **npm run verbose** starts the app in verbose mode
-- **npm run save** starts app in saving mode when every status.html file gets saved
-- **npm run dev** starts the app in development mode. It communicates with API without reverse proxy.
-- **npm run dev-test** App starts in verbose mode and sends requests to two servers. The test server URL is defined in dev-test.env file.
+- _npm start_ starts the app
+- _npm run config_ starts app configuration
+- _npm run list_ shows app configuration
+- _npm run verbose_ starts the app in verbose mode
+- _npm run save_ starts app in saving mode when every status.html file gets saved
+- _npm run dev_ starts the app in development mode. It communicates with API without reverse proxy.
+- _npm run dev-test_ App starts in verbose mode and sends requests to two servers. The test server URL is defined in dev-test.env file.

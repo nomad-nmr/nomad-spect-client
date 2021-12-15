@@ -1,4 +1,4 @@
-Javascript code app that runs on NMR spectrometer PC in Node.js runtime environment and enables communication of NOMAD back-end with Bruker IconNMR software. It parses status and history HTML file(s) and outputs files in external setup folder to control automated run of the NMR spectrometer.
+Javascript app that runs on NMR spectrometer PC in Node.js runtime environment and enables communication of NOMAD back-end with Bruker IconNMR software. It parses status and history HTML file(s) and outputs files in external setup folder to control automated run of the NMR spectrometer.
 
 ## Starting scripts
 

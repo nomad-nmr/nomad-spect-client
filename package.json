@@ -1,31 +1,31 @@
 {
-	"name": "nmr-control-client",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node ./src/app.js run",
-		"config": "node ./src/app.js config",
-		"list": "node ./src/app.js config -l",
-		"verbose": "node ./src/app.js run -v",
-		"save": "node ./src/app.js run -v -s",
-		"dev": "nodemon --ignore './status_files/' --exec 'NODE_ENV=dev node ./src/app.js run --verbose'",
-		"dev-test": "env-cmd -f ./src/config/dev-test.env node ./src/app.js run --verbose"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"axios": "^0.24.0",
-		"chalk": "^4.1.2",
-		"env-cmd": "^10.1.0",
-		"prompt": "^1.1.0",
-		"socket.io-client": "^4.0.0",
-		"tabletojson": "^2.0.4",
-		"uuid": "^8.3.2",
-		"yargs": "^17.1.1"
-	},
-	"devDependencies": {
-		"nodemon": "^2.0.7"
-	}
+  "name": "nomad-spect-client",
+  "version": "3.1.0",
+  "description": "NOMAD spectrometer client",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js run",
+    "config": "node ./src/app.js config",
+    "list": "node ./src/app.js config -l",
+    "verbose": "node ./src/app.js run -v",
+    "save": "node ./src/app.js run -v -s",
+    "dev": "nodemon --ignore './status_files/' --exec 'NODE_ENV=dev node ./src/app.js run --verbose'",
+    "dev-test": "env-cmd -f ./src/config/dev-test.env node ./src/app.js run --verbose"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "chalk": "^4.1.2",
+    "env-cmd": "^10.1.0",
+    "prompt": "^1.1.0",
+    "socket.io-client": "^4.0.0",
+    "tabletojson": "^2.0.4",
+    "uuid": "^8.3.2",
+    "yargs": "^17.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }

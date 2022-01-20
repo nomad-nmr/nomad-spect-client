@@ -1,25 +1,9 @@
 const fs = require('fs')
-const { io, Manager } = require('socket.io-client')
 const { v4: uuidv4 } = require('uuid')
 
 const { readConfig } = require('./config')
 
-const { instrumentId, submissionPath, serverAddress } = readConfig()
-
-const manager = new Manager(serverAddress, {
-  reconnectionDelayMax: 100000,
-  query: { instrumentId }
-})
-
-const socket = manager.socket('/')
-
-//Connecting socket for test server
-let testSocket = undefined
-if (process.env.TEST_URL && process.env.TEST_INSTR_ID) {
-  testSocket = io(process.env.TEST_URL, {
-    query: { instrumentId: process.env.TEST_INSTR_ID }
-  })
-}
+const { submissionPath } = readConfig()
 
 const bookExps = data => {
   const dataObj = JSON.parse(data)
@@ -79,16 +63,20 @@ END`
   fs.writeFileSync(submissionPath + uuidv4() + '-s', submissionFile)
 }
 
-const submitter = () => {
+// const socket = getSocket(serverAddress, instrumentId)
+
+const submitter = socket => {
   socket.on('book', data => bookExps(data))
   socket.on('delete', data => deleteExps(data))
   socket.on('submit', data => submitExps(data))
 
-  if (process.env.TEST_URL && process.env.TEST_INSTR_ID) {
-    testSocket.on('book', data => bookExps(data))
-    testSocket.on('delete', data => deleteExps(data))
-    testSocket.on('submit', data => submitExps(data))
-  }
+  //Connecting socket for test server
+  // if (process.env.TEST_URL && process.env.TEST_INSTR_ID) {
+  //   const testSocket = getSocket(process.env.TEST_URL, process.env.TEST_INSTR_ID)
+  //   testSocket.on('book', data => bookExps(data))
+  //   testSocket.on('delete', data => deleteExps(data))
+  //   testSocket.on('submit', data => submitExps(data))
+  // }
 }
 
 module.exports = submitter

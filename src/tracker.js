@@ -16,10 +16,7 @@ if (process.env.NODE_ENV !== 'dev') {
 
 const statusFileHandler = verbose => {
   if (verbose) {
-    console.log(
-      chalk.blue('parsing status file'),
-      chalk.yellow(` [${new Date().toLocaleString()}]`)
-    )
+    console.log(chalk.blue('Parsing status file'))
   }
   try {
     let statusHTML = fs.readFileSync(statusPath).toString()

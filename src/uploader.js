@@ -37,16 +37,19 @@ const uploader = (socket, verbose) => {
       form.append('group', group)
       form.append('nmrData', blob, 'nmrData.zip')
 
-      const response = await axios.post(serverAddress + '/data/auto', form, {
+      const response = await axios.post(serverAddress + '/data/auto/' + instrumentId, form, {
         headers: { ...form.getHeaders() }
       })
       if (response.status === 200 && verbose) {
-        console.timeEnd('upload')
         console.log(chalk.green('Success!'))
       }
     } catch (error) {
-      console.log(error)
+      console.log(
+        chalk.red('Data upload failed'),
+        chalk.yellow(` [${new Date().toLocaleString()}]`)
+      )
     }
+    console.timeEnd('upload')
   })
 }
 

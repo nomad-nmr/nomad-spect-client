@@ -7,11 +7,8 @@ const axios = require('axios')
 
 const { readConfig } = require('./config')
 const zipDataFolder = require('./zipDataFolder')
-const { instrumentId, nmrDataPath, serverAddress } = readConfig()
 
-if (process.env.NODE_ENV !== 'dev') {
-  serverAddress += '/api'
-}
+const { instrumentId, nmrDataPath, serverAddress } = readConfig()
 
 const uploader = (socket, verbose) => {
   socket.on('upload', async payload => {
@@ -39,6 +36,7 @@ const uploader = (socket, verbose) => {
       })
       if (response.status === 200 && verbose) {
         console.log(chalk.green('Success!'))
+        console.timeEnd('upload')
       }
     } catch (error) {
       console.log(
@@ -46,7 +44,6 @@ const uploader = (socket, verbose) => {
         chalk.yellow(` [${new Date().toLocaleString()}]`)
       )
     }
-    console.timeEnd('upload')
   })
 }
 

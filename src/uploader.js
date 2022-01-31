@@ -1,14 +1,12 @@
 const path = require('path')
-const fs = require('fs/promises')
+// const fs = require('fs/promises')
 
 const chalk = require('chalk')
 const FormData = require('form-data')
 const axios = require('axios')
-const ZipDir = require('zip-dir')
 
 const { readConfig } = require('./config')
-const { from } = require('form-data')
-const { Console } = require('console')
+const zipDataFolder = require('./zipDataFolder')
 const { instrumentId, nmrDataPath, serverAddress } = readConfig()
 
 if (process.env.NODE_ENV !== 'dev') {
@@ -28,14 +26,13 @@ const uploader = (socket, verbose) => {
     try {
       console.time('upload')
       const dataPath = path.join(nmrDataPath, group, 'nmr', datasetName, expNo)
-      const blob = await ZipDir(dataPath)
+      const zippedNMRData = await zipDataFolder(dataPath)
 
       const form = new FormData()
-      form.append('instrumentId', instrumentId)
       form.append('datasetName', datasetName)
       form.append('expNo', expNo)
       form.append('group', group)
-      form.append('nmrData', blob, 'nmrData.zip')
+      form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
       const response = await axios.post(serverAddress + '/data/auto/' + instrumentId, form, {
         headers: { ...form.getHeaders() }

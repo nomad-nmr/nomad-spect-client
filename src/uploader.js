@@ -32,7 +32,9 @@ const uploader = (socket, verbose) => {
       form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
       const response = await axios.post(serverAddress + '/data/auto/' + instrumentId, form, {
-        headers: { ...form.getHeaders() }
+        headers: { ...form.getHeaders() },
+        maxContentLength: 100000000,
+        maxBodyLength: 1000000000
       })
       if (response.status === 200 && verbose) {
         console.log(chalk.green('Success!'))
@@ -43,6 +45,7 @@ const uploader = (socket, verbose) => {
         chalk.red('Data upload failed'),
         chalk.yellow(` [${new Date().toLocaleString()}]`)
       )
+      console.log(error)
     }
   })
 }

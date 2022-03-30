@@ -11,7 +11,8 @@ const zipDataFolder = async dataFolderPath => {
     const allPaths = getFilePathsRecursiveSync(dataFolderPath)
 
     allPaths.forEach(filePath => {
-      let addPath = path.relative(path.join(dataFolderPath, '../..'), filePath)
+      let addPath = path.normalize(path.relative(path.join(dataFolderPath, '../..'), filePath))
+      // console.log(addPath)
       const data = fs.readFileSync(filePath)
       zip.file(addPath, data)
     })

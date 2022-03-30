@@ -11,8 +11,7 @@ const zipDataFolder = async dataFolderPath => {
     const allPaths = getFilePathsRecursiveSync(dataFolderPath)
 
     allPaths.forEach(filePath => {
-      let addPath = path.normalize(path.relative(path.join(dataFolderPath, '../..'), filePath))
-      // console.log(addPath)
+      let addPath = path.relative(path.join(dataFolderPath, '../..'), filePath)
       const data = fs.readFileSync(filePath)
       zip.file(addPath, data)
     })
@@ -33,7 +32,7 @@ const getFilePathsRecursiveSync = dir => {
   if (!pending) return results
 
   for (let file of list) {
-    file = path.resolve(dir, file)
+    file = path.resolve(dir, file).replace(/\\/g, '/')
     let stat = fs.statSync(file)
     if (stat && stat.isDirectory()) {
       res = getFilePathsRecursiveSync(file)

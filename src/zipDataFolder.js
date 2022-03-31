@@ -10,8 +10,12 @@ const zipDataFolder = async dataFolderPath => {
     await access(dataFolderPath)
     const allPaths = getFilePathsRecursiveSync(dataFolderPath)
 
+    console.log(allPaths)
+
     allPaths.forEach(filePath => {
-      let addPath = path.relative(path.join(dataFolderPath, '../..'), filePath)
+      const relativePath = path.relative(path.join(dataFolderPath, '../..'), filePath)
+      //Replacing slashing to convert from Win to Linux paths
+      const addPath = relativePath.replace(/\\/g, '/')
       const data = fs.readFileSync(filePath)
       zip.file(addPath, data)
     })
@@ -32,7 +36,7 @@ const getFilePathsRecursiveSync = dir => {
   if (!pending) return results
 
   for (let file of list) {
-    file = path.resolve(dir, file).replace(/\\/g, '/')
+    file = path.resolve(dir, file)
     let stat = fs.statSync(file)
     if (stat && stat.isDirectory()) {
       res = getFilePathsRecursiveSync(file)
@@ -40,10 +44,10 @@ const getFilePathsRecursiveSync = dir => {
     } else {
       results.push(file)
     }
-    if (!--pending) return results
+    if (!--pending) return results.map(i => i.replace(/\\/g, '/'))
   }
 
-  return results
+  return results.map(i => i.replace(/\\/g, '/'))
 }
 
 module.exports = zipDataFolder

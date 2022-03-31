@@ -10,8 +10,6 @@ const zipDataFolder = async dataFolderPath => {
     await access(dataFolderPath)
     const allPaths = getFilePathsRecursiveSync(dataFolderPath)
 
-    console.log(allPaths)
-
     allPaths.forEach(filePath => {
       const relativePath = path.relative(path.join(dataFolderPath, '../..'), filePath)
       //Replacing slashing to convert from Win to Linux paths

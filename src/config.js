@@ -67,6 +67,12 @@ const setConfig = list => {
           description: chalk.greenBright('Absolute path to IconNMR data folder'),
           type: 'string',
           default: configObj.nmrDataPath
+        },
+        {
+          name: 'uploadDelay',
+          description: chalk.greenBright('Delay for data upload [ms]'),
+          type: 'number',
+          default: configObj.uploadDelay
         }
       ],
       (err, result) => {

@@ -8,20 +8,18 @@ const axios = require('axios')
 const { readConfig } = require('./config')
 const zipDataFolder = require('./zipDataFolder')
 
-const { instrumentId, nmrDataPath, serverAddress, uploadDelay } = readConfig()
+const { instrumentId, nmrDataPath, serverAddress } = readConfig()
 
 const uploader = (socket, verbose) => {
   socket.on('upload', async payload => {
-    const { datasetName, expNo, group } = JSON.parse(payload)
+    const { datasetName, expNo, group, repair } = JSON.parse(payload)
 
-    //timeout to wait until the whole dataset is written by TopSpin
-    //If the timeout is to short or null incomplete dataset is uploaded
-    setTimeout(async () => {
+    const uploadData = async () => {
       if (verbose) {
         console.log(
           chalk.magenta(`Uploading data ${datasetName}-${expNo}`),
           chalk.yellow(` [${new Date().toLocaleString()}]`),
-          `delay: ${uploadDelay}`
+          !repair && `delay: ${uploadDelay}`
         )
       }
 
@@ -52,8 +50,20 @@ const uploader = (socket, verbose) => {
         )
         console.log(error)
       }
-    }, uploadDelay || 15000)
+    }
+
+    if (repair) {
+      uploadData()
+    } else {
+      setTimeout(uploadData(), uploadDelay || 15000)
+    }
+
+    //timeout to wait until the whole dataset is written by TopSpin
+    //If the timeout is to short or null incomplete dataset is uploaded
   })
+  // socket.on('repair', payload => {
+  //   console.log(JSON.parse(payload))
+  // })
 }
 
 module.exports = uploader

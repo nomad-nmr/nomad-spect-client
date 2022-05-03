@@ -8,7 +8,7 @@ const axios = require('axios')
 const { readConfig } = require('./config')
 const zipDataFolder = require('./zipDataFolder')
 
-const { instrumentId, nmrDataPath, serverAddress } = readConfig()
+const { instrumentId, nmrDataPath, serverAddress, uploadDelay } = readConfig()
 
 const uploader = (socket, verbose) => {
   socket.on('upload', async payload => {

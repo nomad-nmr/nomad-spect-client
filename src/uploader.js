@@ -55,11 +55,10 @@ const uploader = (socket, verbose) => {
     if (repair) {
       uploadData()
     } else {
-      setTimeout(uploadData(), uploadDelay || 15000)
+      //timeout to wait until the whole dataset is written by TopSpin
+      //If the timeout is to short or null incomplete dataset is uploaded
+      setTimeout(() => uploadData(), uploadDelay || 15000)
     }
-
-    //timeout to wait until the whole dataset is written by TopSpin
-    //If the timeout is to short or null incomplete dataset is uploaded
   })
   // socket.on('repair', payload => {
   //   console.log(JSON.parse(payload))

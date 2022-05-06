@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "chalk": "^4.1.2",
     "env-cmd": "^10.1.0",
     "form-data": "^4.0.0",

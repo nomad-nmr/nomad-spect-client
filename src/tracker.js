@@ -10,7 +10,7 @@ const configFile = readConfig()
 const { instrumentId, statusPath, historyPath } = configFile
 let { serverAddress } = configFile
 
-if (process.env.NODE_ENV !== 'dev') {
+if (process.env.NODE_ENV !== 'dev' && process.env.NODE_ENV !== 'docker-dev') {
   serverAddress += '/api'
 }
 

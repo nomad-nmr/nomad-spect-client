@@ -10,8 +10,9 @@
     "list": "node ./src/app.js config -l",
     "verbose": "node ./src/app.js run -v",
     "save": "node ./src/app.js run -v -s",
-    "dev": "nodemon --ignore '/app/status_files/' --exec 'NODE_ENV=dev node /app/src/app.js run --verbose'",
-    "dev-test": "env-cmd -f /app/src/config/dev-test.env node /app/src/app.js run --verbose"
+    "dev": "nodemon --ignore '/app/status_files/' --exec 'NODE_ENV=dev node ./src/app.js run --verbose'",
+    "docker": "node /app/src/app.js run --verbose",
+    "docker-dev": "nodemon --ignore '/app/status_files/' --exec 'node ./src/app.js run --verbose'"
   },
   "author": "",
   "license": "ISC",

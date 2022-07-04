@@ -3,4 +3,5 @@
 /status_files
 /status-save
 /submit_files
+/docker-compose.yaml
 src/config/config.json

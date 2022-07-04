@@ -8,8 +8,8 @@ RUN npm install
 
 COPY ./src /app/src
 
-ENV NODE_ENV=docker-dev
+ENV NODE_ENV=docker
 ENV NMR_DATA_PATH=/app/nmr-data
 
-CMD ["npm", "run", "docker-dev"]
+CMD ["npm", "run", "docker"]
 

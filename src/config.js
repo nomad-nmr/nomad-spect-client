@@ -4,16 +4,28 @@ const prompt = require('prompt')
 const chalk = require('chalk')
 
 const readConfig = () => {
-  const configPath = fs.existsSync('./src/config/config.json')
-    ? './src/config/config.json'
-    : './src/config/config-default.json'
-  const configJSON = fs.readFileSync(configPath).toString()
-  try {
-    return JSON.parse(configJSON)
-  } catch (err) {
-    console.log(chalk.red('ERROR - config.json is empty or corrupted'))
-    console.log(chalk.red.italic('Use app.js config to save new configuration'))
-    return {}
+  if (process.env.NODE_ENV === 'docker' || process.env.NODE_ENV === 'docker-dev') {
+    return {
+      instrumentId: process.env.INSTRUMENT_ID,
+      statusPath: process.env.STATUS_PATH,
+      historyPath: process.env.HISTORY_PATH,
+      serverAddress: process.env.SERVER_URL,
+      submissionPath: process.env.SUBMIT_PATH,
+      nmrDataPath: process.env.NMR_DATA_PATH,
+      uploadDelay: process.env.UPLOAD_DELAY
+    }
+  } else {
+    const configPath = fs.existsSync('./src/config/config.json')
+      ? './src/config/config.json'
+      : './src/config/config-default.json'
+    const configJSON = fs.readFileSync(configPath).toString()
+    try {
+      return JSON.parse(configJSON)
+    } catch (err) {
+      console.log(chalk.red('ERROR - config.json is empty or corrupted'))
+      console.log(chalk.red.italic('Use app.js config to save new configuration'))
+      return {}
+    }
   }
 }
 

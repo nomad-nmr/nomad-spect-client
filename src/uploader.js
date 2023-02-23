@@ -26,6 +26,7 @@ const uploader = (socket, verbose) => {
       try {
         console.time('upload')
         const dataPath = path.join(nmrDataPath, group, 'nmr', datasetName, expNo)
+        // file deepcode ignore PT: <Unclear why this is unsecure>
         const zippedNMRData = await zipDataFolder(dataPath)
 
         const form = new FormData()

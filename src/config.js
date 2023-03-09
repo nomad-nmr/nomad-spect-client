@@ -1,9 +1,9 @@
-const fs = require('fs')
+import { existsSync, readFileSync, writeFile } from 'fs'
 
-const prompt = require('prompt')
-const chalk = require('chalk')
+import prompt from 'prompt'
+import chalk from 'chalk'
 
-const readConfig = () => {
+export const readConfig = () => {
   if (process.env.NODE_ENV === 'docker' || process.env.NODE_ENV === 'docker-dev') {
     return {
       instrumentId: process.env.INSTRUMENT_ID,
@@ -15,10 +15,10 @@ const readConfig = () => {
       uploadDelay: process.env.UPLOAD_DELAY
     }
   } else {
-    const configPath = fs.existsSync('./src/config/config.json')
+    const configPath = existsSync('./src/config/config.json')
       ? './src/config/config.json'
       : './src/config/config-default.json'
-    const configJSON = fs.readFileSync(configPath).toString()
+    const configJSON = readFileSync(configPath).toString()
     try {
       return JSON.parse(configJSON)
     } catch (err) {
@@ -29,8 +29,8 @@ const readConfig = () => {
   }
 }
 
-const setConfig = list => {
-  // console.log(list)
+export const setConfig = list => {
+  console.log(list)
   if (list) {
     console.log(chalk.greenBright.inverse(' *** Current client config *** '))
     console.log(readConfig())
@@ -92,7 +92,7 @@ const setConfig = list => {
           return onError(err)
         }
         const newConfigJSON = JSON.stringify(result)
-        fs.writeFile('./src/config/config.json', newConfigJSON, () => {
+        writeFile('./src/config/config.json', newConfigJSON, () => {
           console.log(chalk.blue('     !!!   SUCCESS   !!!   '))
           console.log(chalk.greenBright.inverse(' *** Current client config *** '))
           console.log(readConfig())
@@ -107,7 +107,5 @@ const onError = err => {
   return 1
 }
 
-module.exports = {
-  readConfig: readConfig,
-  setConfig: setConfig
-}
+// export const readConfig = readConfig
+// export const setConfig = setConfig

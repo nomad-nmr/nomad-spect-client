@@ -1,10 +1,10 @@
-const fs = require('fs')
-const tableToJSON = require('tabletojson').Tabletojson
-const chalk = require('chalk')
-const axios = require('axios')
+import { constants, readFileSync, copyFileSync, existsSync, watchFile, mkdirSync } from 'fs'
+import { Tabletojson as tableToJSON } from 'tabletojson'
+import chalk from 'chalk'
+import axios from 'axios'
 
-const { readConfig } = require('./config')
-const { COPYFILE_EXCL } = fs.constants
+import { readConfig } from './config.js'
+const { COPYFILE_EXCL } = constants
 
 const configFile = readConfig()
 const { instrumentId, statusPath, historyPath } = configFile
@@ -19,9 +19,9 @@ const statusFileHandler = verbose => {
     console.log(chalk.blue('Parsing status file'))
   }
   try {
-    let statusHTML = fs.readFileSync(statusPath).toString()
+    let statusHTML = readFileSync(statusPath).toString()
     if (statusPath !== historyPath) {
-      statusHTML = statusHTML + fs.readFileSync(historyPath).toString()
+      statusHTML = statusHTML + readFileSync(historyPath).toString()
     }
     const statusObj = {
       instrumentId,
@@ -46,8 +46,7 @@ const statusFileHandler = verbose => {
 
     if (process.env.TEST_URL && process.env.TEST_INSTR_ID) {
       const testStatusObj = { ...statusObj, instrumentId: process.env.TEST_INSTR_ID }
-      axios
-        .patch(process.env.TEST_URL + '/api/tracker/status', testStatusObj)
+      patch(process.env.TEST_URL + '/api/tracker/status', testStatusObj)
         .then(res => {
           if (res.status === 201) {
             console.log(chalk.greenBright('Test server was updated'))
@@ -67,12 +66,12 @@ let statusFileCount = 1
 let historyFileCount = 1
 const saveStatusHandler = () => {
   console.log(`Saving status file number ${statusFileCount}`)
-  fs.copyFileSync(statusPath, `./status-save/status-${statusFileCount}.html`, COPYFILE_EXCL)
+  copyFileSync(statusPath, `./status-save/status-${statusFileCount}.html`, COPYFILE_EXCL)
   statusFileCount++
 }
 const saveHistoryHandler = () => {
   console.log(`Saving history file number ${historyFileCount}`)
-  fs.copyFileSync(historyPath, `./status-save/history-${historyFileCount}.html`, COPYFILE_EXCL)
+  copyFileSync(historyPath, `./status-save/history-${historyFileCount}.html`, COPYFILE_EXCL)
   historyFileCount++
 }
 
@@ -89,11 +88,11 @@ const tracker = (verbose, save) => {
       console.log(chalk.red('[Server Error]', err, 'Check whether instrument ID is valid'))
     })
 
-  if (fs.existsSync(statusPath)) {
-    fs.watchFile(statusPath, () => {
+  if (existsSync(statusPath)) {
+    watchFile(statusPath, () => {
       if (save) {
-        if (!fs.existsSync('./status-save/')) {
-          fs.mkdirSync('./status-save/')
+        if (!existsSync('./status-save/')) {
+          mkdirSync('./status-save/')
         }
         saveStatusHandler()
       }
@@ -102,17 +101,17 @@ const tracker = (verbose, save) => {
     console.log(chalk.greenBright(`Tracker watching ${statusPath}`))
     console.log(chalk.cyan.italic('Press Ctrl+C any time to quit'))
   } else {
-    console.log(chalk.red.inverse('   Status file path is invalid   '))
+    console.log(red.inverse('   Status file path is invalid   '))
   }
 
-  if (statusPath !== historyPath && fs.existsSync(historyPath) && save) {
-    fs.watchFile(historyPath, () => {
-      if (!fs.existsSync('./status-save/')) {
-        fs.mkdirSync('./status-save/')
+  if (statusPath !== historyPath && existsSync(historyPath) && save) {
+    watchFile(historyPath, () => {
+      if (!existsSync('./status-save/')) {
+        mkdirSync('./status-save/')
       }
       saveHistoryHandler()
     })
   }
 }
 
-module.exports = tracker
+export default tracker

@@ -1,5 +1,5 @@
-const { Manager } = require('socket.io-client')
-const { readConfig } = require('./config')
+import { Manager } from 'socket.io-client'
+import { readConfig } from './config.js'
 
 const getSocket = () => {
   const { serverAddress, instrumentId } = readConfig()
@@ -13,4 +13,4 @@ const getSocket = () => {
   return socket
 }
 
-module.exports = getSocket
+export default getSocket

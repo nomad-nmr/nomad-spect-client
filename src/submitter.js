@@ -1,7 +1,7 @@
-const fs = require('fs')
-const { v4: uuidv4 } = require('uuid')
+import { writeFileSync } from 'fs'
+import { v4 as uuidv4 } from 'uuid'
 
-const { readConfig } = require('./config')
+import { readConfig } from './config.js'
 
 const { submissionPath } = readConfig()
 
@@ -34,7 +34,7 @@ TITLE ${entry.title} || ${exp.expTitle}
   submissionFile += `		
 END`
 
-  fs.writeFileSync(submissionPath + uuidv4() + '-b', submissionFile)
+  writeFileSync(submissionPath + uuidv4() + '-b', submissionFile)
 }
 
 const deleteExps = data => {
@@ -47,7 +47,7 @@ DELETE
   })
   submissionFile += `
 END`
-  fs.writeFileSync(submissionPath + uuidv4() + '-d', submissionFile)
+  writeFileSync(submissionPath + uuidv4() + '-d', submissionFile)
 }
 
 const submitExps = data => {
@@ -60,7 +60,7 @@ SUBMIT_HOLDER ${holder}
   })
   submissionFile += `
 END`
-  fs.writeFileSync(submissionPath + uuidv4() + '-s', submissionFile)
+  writeFileSync(submissionPath + uuidv4() + '-s', submissionFile)
 }
 
 // const socket = getSocket(serverAddress, instrumentId)
@@ -79,4 +79,4 @@ const submitter = socket => {
   // }
 }
 
-module.exports = submitter
+export default submitter

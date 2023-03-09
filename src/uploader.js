@@ -1,12 +1,11 @@
-const path = require('path')
-// const fs = require('fs/promises')
+import { join } from 'path'
 
-const chalk = require('chalk')
-const FormData = require('form-data')
-const axios = require('axios')
+import chalk from 'chalk'
+import FormData from 'form-data'
+import axios from 'axios'
 
-const { readConfig } = require('./config')
-const zipDataFolder = require('./zipDataFolder')
+import { readConfig } from './config.js'
+import zipDataFolder from './zipDataFolder.js'
 
 const { instrumentId, nmrDataPath, serverAddress, uploadDelay } = readConfig()
 
@@ -25,7 +24,7 @@ const uploader = (socket, verbose) => {
 
       try {
         console.time('upload')
-        const dataPath = path.join(nmrDataPath, group, 'nmr', datasetName, expNo)
+        const dataPath = join(nmrDataPath, group, 'nmr', datasetName, expNo)
         // file deepcode ignore PT: <Unclear why this is unsecure>
         const zippedNMRData = await zipDataFolder(dataPath)
 
@@ -66,4 +65,4 @@ const uploader = (socket, verbose) => {
   // })
 }
 
-module.exports = uploader
+export default uploader

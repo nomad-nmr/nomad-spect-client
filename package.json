@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest --reporter verbose",
+    "coverage": "vitest run --coverage",
     "start": "node ./src/app.js run",
     "config": "node ./src/app.js config",
     "list": "node ./src/app.js config -l",
@@ -30,6 +31,8 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "@vitest/coverage-c8": "^0.29.2",
+    "nodemon": "^2.0.7",
+    "vitest": "^0.29.2"
   }
 }

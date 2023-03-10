@@ -5,3 +5,4 @@
 /submit_files
 /docker-compose.yaml
 src/config/config.json
+/coverage

@@ -85,7 +85,13 @@ const tracker = (verbose, save) => {
       }
     })
     .catch(err => {
-      console.log(chalk.red('[Server Error]', err, 'Check whether instrument ID is valid'))
+      console.log(
+        chalk.red(
+          '[Server Error]',
+          err,
+          'Connection refused by the server. Double check server URL and instrument ID in the client configuration'
+        )
+      )
     })
 
   if (existsSync(statusPath)) {

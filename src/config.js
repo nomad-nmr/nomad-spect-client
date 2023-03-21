@@ -11,7 +11,8 @@ export const readConfig = () => {
       historyPath: process.env.HISTORY_PATH,
       serverAddress: process.env.SERVER_URL,
       submissionPath: process.env.SUBMIT_PATH,
-      nmrDataPath: process.env.NMR_DATA_PATH,
+      nmrDataPathAuto: process.env.NMR_DATA_PATH_AUTO,
+      nmrDataPathManual: process.env.NMR_DATA_PATH_MANUAL,
       uploadDelay: process.env.UPLOAD_DELAY
     }
   } else {
@@ -75,10 +76,16 @@ export const setConfig = list => {
           default: configObj.submissionPath
         },
         {
-          name: 'nmrDataPath',
+          name: 'nmrDataPathAuto',
           description: chalk.greenBright('Absolute path to IconNMR data folder'),
           type: 'string',
-          default: configObj.nmrDataPath
+          default: configObj.nmrDataPathAuto
+        },
+        {
+          name: 'nmrDataPathManual',
+          description: chalk.greenBright('Absolute path to manual NMR data folder'),
+          type: 'string',
+          default: configObj.nmrDataPathManual
         },
         {
           name: 'uploadDelay',

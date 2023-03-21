@@ -7,7 +7,7 @@ import axios from 'axios'
 import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
 
-const { instrumentId, nmrDataPath, serverAddress, uploadDelay } = readConfig()
+const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay } = readConfig()
 
 const uploader = (socket, verbose) => {
   socket.on('upload', async payload => {
@@ -24,7 +24,8 @@ const uploader = (socket, verbose) => {
 
       try {
         console.time('upload')
-        const dataPath = join(nmrDataPath, group, 'nmr', datasetName, expNo)
+
+        const dataPath = join(nmrDataPathAuto, group, 'nmr', datasetName, expNo)
         // file deepcode ignore PT: <Unclear why this is unsecure>
         const zippedNMRData = await zipDataFolder(dataPath)
 

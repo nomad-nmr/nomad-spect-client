@@ -32,11 +32,11 @@ const getFolders = async (data, cb) => {
             const expNoStats = await stat(expNoFolderPath)
 
             const titlePath = join(expNoFolderPath, 'pdata', '1', 'title')
-            const paramsPath = join(expNoFolderPath, 'pdata', '1', 'parm.txt')
+            const paramsPath = join(expNoFolderPath, 'acqus')
             const procsPath = join(expNoFolderPath, 'pdata', '1', 'procs')
 
             let title
-            let paramsArr
+            let paramsFileArr
             let procsStats
 
             try {
@@ -48,23 +48,17 @@ const getFolders = async (data, cb) => {
 
             try {
               await access(paramsPath)
-              paramsArr = (await readFile(join(paramsPath), 'utf-8')).split('\r\n')
+              paramsFileArr = await (await readFile(join(paramsPath), 'utf-8')).split('##$')
             } catch (error) {
               console.log(error)
             }
 
-            const solvent =
-              paramsArr &&
-              paramsArr
-                .find(e => e.startsWith('SOLVENT'))
-                .slice(7)
-                .trim()
-            const pulseProgram =
-              paramsArr &&
-              paramsArr
-                .find(e => e.startsWith('PULPROG'))
-                .slice(7)
-                .trim()
+            const solventE = paramsFileArr.find(e => e.startsWith('SOLVENT'))
+            const solvent = solventE.slice(10, solventE.indexOf('>'))
+
+            const pulProgE = paramsFileArr.find(e => e.startsWith('PULPROG'))
+            const pulseProgram = pulProgE.slice(10, pulProgE.indexOf('>'))
+            console.log(solvent, pulseProgram)
 
             try {
               await access(procsPath)

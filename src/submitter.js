@@ -47,8 +47,8 @@ export const deleteExps = data => {
     let submissionFile = ''
     JSON.parse(data).forEach(holder => {
       submissionFile += `
-  HOLDER ${holder}
-  DELETE
+HOLDER ${holder}
+DELETE
       `
     })
     submissionFile += `

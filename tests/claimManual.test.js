@@ -22,7 +22,7 @@ describe('GET-FOLDERS', () => {
       title: 'test-title',
       solvent: 'DMSO',
       pulseProgram: 'zg30',
-      key: 'test-dataset-10'
+      key: 'test-dataset#/#10'
     })
   })
 

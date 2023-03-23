@@ -26,11 +26,14 @@ const getFolders = async (data, cb) => {
         //getting detailed info for each expNo subfolder
         const exps = []
         const expNoArr = await getSubFolders(datasetFolderPath)
+
+        if (expNoArr.length === 0) {
+          return
+        }
+
         await Promise.all(
           expNoArr.map(async expNo => {
             const expNoFolderPath = join(datasetFolderPath, expNo)
-            const expNoStats = await stat(expNoFolderPath)
-
             const titlePath = join(expNoFolderPath, 'pdata', '1', 'title')
             const paramsPath = join(expNoFolderPath, 'acqus')
             const procsPath = join(expNoFolderPath, 'pdata', '1', 'procs')
@@ -38,6 +41,16 @@ const getFolders = async (data, cb) => {
             let title
             let paramsFileArr
             let procsStats
+            let expNoStats
+            let solvent
+            let pulseProgram
+
+            try {
+              await access(expNoFolderPath)
+              expNoStats = await stat(expNoFolderPath)
+            } catch (error) {
+              console.log(error)
+            }
 
             try {
               await access(titlePath)
@@ -49,15 +62,14 @@ const getFolders = async (data, cb) => {
             try {
               await access(paramsPath)
               paramsFileArr = await (await readFile(join(paramsPath), 'utf-8')).split('##$')
+              const solventE = paramsFileArr.find(e => e.startsWith('SOLVENT'))
+              solvent = solventE.slice(10, solventE.indexOf('>'))
+
+              const pulProgE = paramsFileArr.find(e => e.startsWith('PULPROG'))
+              pulseProgram = pulProgE.slice(10, pulProgE.indexOf('>'))
             } catch (error) {
               console.log(error)
             }
-
-            const solventE = paramsFileArr.find(e => e.startsWith('SOLVENT'))
-            const solvent = solventE.slice(10, solventE.indexOf('>'))
-
-            const pulProgE = paramsFileArr.find(e => e.startsWith('PULPROG'))
-            const pulseProgram = pulProgE.slice(10, pulProgE.indexOf('>'))
 
             try {
               await access(procsPath)
@@ -65,23 +77,25 @@ const getFolders = async (data, cb) => {
             } catch (error) {
               console.log(error)
             }
-
-            exps.push({
-              expNo,
-              dateCreated: expNoStats.ctime,
-              dateLastModified: procsStats.mtime,
-              title,
-              solvent,
-              pulseProgram,
-              key: folder + '-' + expNo
-            })
+            if (procsStats) {
+              exps.push({
+                expNo,
+                dateCreated: expNoStats.ctime,
+                dateLastModified: procsStats.mtime,
+                title,
+                solvent,
+                pulseProgram,
+                key: folder + '#/#' + expNo
+              })
+            }
           })
         )
         responseData.push({ datasetName: folder, date: folderStats.ctime, exps, key: folder })
       })
     )
-    cb(responseData)
+    cb(responseData.filter(i => i.exps.length > 0))
   } catch (error) {
+    cb('error')
     console.log(error)
   }
 }

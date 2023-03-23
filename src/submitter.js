@@ -52,7 +52,7 @@ DELETE
       `
     })
     submissionFile += `
-  END`
+END`
     writeFileSync(submissionPath + uuidv4() + '-d', submissionFile)
   } catch (error) {
     console.log(chalk.red('Client failed to write submission file', error))

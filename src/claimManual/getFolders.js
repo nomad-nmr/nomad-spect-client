@@ -7,6 +7,7 @@ const { nmrDataPathManual } = readConfig()
 
 const getFolders = async (data, cb) => {
   const groupFolderPath = join(nmrDataPathManual, data.group, 'nmr')
+
   try {
     await access(groupFolderPath)
   } catch (error) {
@@ -17,7 +18,6 @@ const getFolders = async (data, cb) => {
   try {
     const responseData = []
     const datasetFolders = await getSubFolders(groupFolderPath)
-
     await Promise.all(
       datasetFolders.map(async folder => {
         const datasetFolderPath = join(groupFolderPath, folder)
@@ -58,7 +58,6 @@ const getFolders = async (data, cb) => {
 
             const pulProgE = paramsFileArr.find(e => e.startsWith('PULPROG'))
             const pulseProgram = pulProgE.slice(10, pulProgE.indexOf('>'))
-            console.log(solvent, pulseProgram)
 
             try {
               await access(procsPath)
@@ -92,6 +91,7 @@ const getSubFolders = async source => {
   const subfolderArr = (await readdir(source, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
+
   return Promise.resolve(subfolderArr)
 }
 

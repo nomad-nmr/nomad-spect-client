@@ -50,7 +50,7 @@ const uploadDataAuto = async (payload, verbose) => {
 }
 
 const uploadDataManual = async (payload, verbose) => {
-  const { userId, group, expsArr } = JSON.parse(payload)
+  const { userId, group, expsArr, claimId } = JSON.parse(payload)
 
   try {
     console.time('upload-m')
@@ -70,6 +70,8 @@ const uploadDataManual = async (payload, verbose) => {
 
         const { title, solvent, pulseProgram, expNoStats } = await parseMetaData(dataPath)
 
+        console.log(expNoStats.ctime)
+
         // file deepcode ignore PT: <Unclear why this is unsecure>
         const zippedNMRData = await zipDataFolder(dataPath)
 
@@ -82,7 +84,8 @@ const uploadDataManual = async (payload, verbose) => {
         form.append('solvent', solvent)
         form.append('pulseProgram', pulseProgram)
         form.append('instrumentId', instrumentId)
-        form.append('dateCreated', expNoStats.ctime.toLocaleString())
+        form.append('claimId', claimId)
+        form.append('dateCreated', expNoStats.ctime.toISOString())
         form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
         const response = await axios.post(serverAddress + '/data/manual/' + instrumentId, form, {

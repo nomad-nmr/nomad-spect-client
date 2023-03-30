@@ -42,8 +42,8 @@ export default async (data, cb) => {
             if (procsStats) {
               exps.push({
                 expNo,
-                dateCreated: expNoStats.ctime,
-                dateLastModified: procsStats.mtime,
+                dateCreated: expNoStats.ctime.toLocaleString(),
+                dateLastModified: procsStats.mtime.toLocaleString(),
                 title,
                 solvent,
                 pulseProgram,
@@ -52,7 +52,12 @@ export default async (data, cb) => {
             }
           })
         )
-        responseData.push({ datasetName: folder, date: folderStats.ctime, exps, key: folder })
+        responseData.push({
+          datasetName: folder,
+          date: folderStats.ctime.toLocaleString(),
+          exps,
+          key: folder
+        })
       })
     )
     cb(responseData.filter(i => i.exps.length > 0))

@@ -33,6 +33,7 @@ const uploadDataAuto = async (payload, verbose) => {
     form.append('datasetName', datasetName)
     form.append('expNo', expNo)
     form.append('group', group)
+    form.append('dataType', 'auto')
     form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
     const response = await axios.post(serverAddress + '/data/auto/' + instrumentId, form, {
@@ -82,7 +83,9 @@ const uploadDataManual = async (payload, verbose) => {
         form.append('solvent', solvent)
         form.append('pulseProgram', pulseProgram)
         form.append('instrumentId', instrumentId)
+        form.append('dataType', 'manual')
         form.append('claimId', claimId)
+
         form.append('dateCreated', expNoStats.ctime.toISOString())
         form.append('nmrData', zippedNMRData, 'nmrData.zip')
 

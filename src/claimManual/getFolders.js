@@ -47,7 +47,7 @@ export default async (data, cb) => {
                 title,
                 solvent,
                 pulseProgram,
-                key: folder + '#/#' + expNo
+                key: folder + '#-#' + expNo
               })
             }
           })

@@ -57,11 +57,11 @@ const uploadDataManual = async (payload, verbose) => {
 
     await Promise.all(
       expsArr.map(async exp => {
-        const datasetName = exp.split('#/#')[0]
-        const expNo = exp.split('#/#')[1]
+        const datasetName = exp.split('#-#')[0]
+        const expNo = exp.split('#-#')[1]
         if (verbose) {
           console.log(
-            chalk.magenta(`Uploading data ${datasetName}#/#${expNo}`),
+            chalk.magenta(`Uploading data ${datasetName}#-#${expNo}`),
             chalk.yellow(` [${new Date().toLocaleString()}]`)
           )
         }
@@ -69,8 +69,6 @@ const uploadDataManual = async (payload, verbose) => {
         const dataPath = join(nmrDataPathManual, group, 'nmr', datasetName, expNo)
 
         const { title, solvent, pulseProgram, expNoStats } = await parseMetaData(dataPath)
-
-        console.log(expNoStats.ctime)
 
         // file deepcode ignore PT: <Unclear why this is unsecure>
         const zippedNMRData = await zipDataFolder(dataPath)

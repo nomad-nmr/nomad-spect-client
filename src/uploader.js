@@ -8,8 +8,12 @@ import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
 import { parseMetaData } from './claimManual/getFolders.js'
 
-const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay, nmrDataPathManual } =
-  readConfig()
+const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay } = readConfig()
+
+const { nmrDataPathManual } =
+  process.env.NODE_ENV === 'test'
+    ? { nmrDataPathManual: join(__dirname, '../tests/fixtures/data-manual') }
+    : readConfig()
 
 const uploadDataAuto = async (payload, verbose) => {
   const { datasetName, expNo, group } = JSON.parse(payload)
@@ -50,7 +54,7 @@ const uploadDataAuto = async (payload, verbose) => {
   }
 }
 
-const uploadDataManual = async (payload, verbose) => {
+export const uploadDataManual = async (payload, verbose) => {
   const { userId, group, expsArr, claimId } = JSON.parse(payload)
 
   try {
@@ -102,6 +106,7 @@ const uploadDataManual = async (payload, verbose) => {
     )
     console.timeEnd('upload-m')
   } catch (error) {
+    console.log(error)
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
   }
 }
@@ -113,7 +118,7 @@ const uploader = (socket, verbose) => {
     setTimeout(() => uploadDataAuto(payload, verbose), uploadDelay || 15000)
   })
 
-  socket.on('upload-repair', payload => uplouploadDataAuto(payload))
+  socket.on('upload-repair', payload => uploadDataAuto(payload))
 
   socket.on('upload-manual', payload => uploadDataManual(payload, verbose))
 }

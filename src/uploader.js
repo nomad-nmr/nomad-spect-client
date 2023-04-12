@@ -8,14 +8,10 @@ import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
 import { parseMetaData } from './claimManual/getFolders.js'
 
-const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay } = readConfig()
+const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay, nmrDataPathManual } =
+  readConfig()
 
-const { nmrDataPathManual } =
-  process.env.NODE_ENV === 'test'
-    ? { nmrDataPathManual: join(__dirname, '../tests/fixtures/data-manual') }
-    : readConfig()
-
-const uploadDataAuto = async (payload, verbose) => {
+export const uploadDataAuto = async (payload, verbose) => {
   const { datasetName, expNo, group } = JSON.parse(payload)
 
   if (verbose) {
@@ -79,6 +75,7 @@ export const uploadDataManual = async (payload, verbose) => {
         const zippedNMRData = await zipDataFolder(dataPath)
 
         const form = new FormData()
+
         form.append('datasetName', datasetName)
         form.append('expNo', expNo)
         form.append('group', group)
@@ -89,7 +86,6 @@ export const uploadDataManual = async (payload, verbose) => {
         form.append('instrumentId', instrumentId)
         form.append('dataType', 'manual')
         form.append('claimId', claimId)
-
         form.append('dateCreated', expNoStats.ctime.toISOString())
         form.append('nmrData', zippedNMRData, 'nmrData.zip')
 

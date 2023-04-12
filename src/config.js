@@ -23,7 +23,10 @@ export const readConfig = () => {
   if (process.env.NODE_ENV === 'test') {
     return {
       submissionPath: './submit_files',
-      nmrDataPathManual: join(__dirname, '../tests/fixtures/data-manual')
+      nmrDataPathManual: join(__dirname, '../tests/fixtures/data-manual'),
+      nmrDataPathAuto: join(__dirname, '../tests/fixtures/data-auto'),
+      instrumentId: '123-test-id',
+      serverAddress: 'test-server-url'
     }
   }
 

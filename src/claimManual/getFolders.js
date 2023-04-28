@@ -113,9 +113,6 @@ export const parseMetaData = async expNoFolderPath => {
     console.log(error)
   }
 
-  console.log(expNoStats.ctime.toISOString())
-  console.log(procsStats.mtime.toISOString())
-
   return Promise.resolve({ title, solvent, pulseProgram, expNoStats, procsStats })
 }
 

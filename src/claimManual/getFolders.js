@@ -42,8 +42,8 @@ export default async (data, cb) => {
             if (procsStats) {
               exps.push({
                 expNo,
-                dateCreated: expNoStats.ctime.toDateString(),
-                dateLastModified: procsStats.mtime.toDateString(),
+                dateCreated: expNoStats.ctime.toISOString(),
+                dateLastModified: procsStats.mtime.toISOString(),
                 title,
                 solvent,
                 pulseProgram,
@@ -54,7 +54,7 @@ export default async (data, cb) => {
         )
         responseData.push({
           datasetName: folder,
-          date: folderStats.ctime.toDateString(),
+          date: folderStats.ctime.toISOString(),
           exps,
           key: folder
         })
@@ -113,8 +113,8 @@ export const parseMetaData = async expNoFolderPath => {
     console.log(error)
   }
 
-  console.log(expNoStats.ctime.toDateString())
-  console.log(procsStats.mtime.toDateString())
+  console.log(expNoStats.ctime.toISOString())
+  console.log(procsStats.mtime.toISOString())
 
   return Promise.resolve({ title, solvent, pulseProgram, expNoStats, procsStats })
 }

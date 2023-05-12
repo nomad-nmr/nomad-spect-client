@@ -4,6 +4,7 @@ import tracker from './tracker.js'
 import submitter from './submitter.js'
 import uploader from './uploader.js'
 import getSocket from './getSocket.js'
+import claimManual from './claimManual/index.js'
 import { setConfig } from './config.js'
 
 yargs(process.argv.slice(2))
@@ -41,6 +42,7 @@ yargs(process.argv.slice(2))
       const socket = getSocket()
       submitter(socket)
       uploader(socket, argv.verbose)
+      claimManual(socket)
     }
   })
   .help()

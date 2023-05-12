@@ -1,9 +1,11 @@
 import { existsSync, readFileSync, writeFile } from 'fs'
+import { join } from 'path'
 
 import prompt from 'prompt'
 import chalk from 'chalk'
 
 export const readConfig = () => {
+  //configuration for docker environment
   if (process.env.NODE_ENV === 'docker' || process.env.NODE_ENV === 'docker-dev') {
     return {
       instrumentId: process.env.INSTRUMENT_ID,
@@ -11,21 +13,34 @@ export const readConfig = () => {
       historyPath: process.env.HISTORY_PATH,
       serverAddress: process.env.SERVER_URL,
       submissionPath: process.env.SUBMIT_PATH,
-      nmrDataPath: process.env.NMR_DATA_PATH,
+      nmrDataPathAuto: process.env.NMR_DATA_PATH_AUTO,
+      nmrDataPathManual: process.env.NMR_DATA_PATH_MANUAL,
       uploadDelay: process.env.UPLOAD_DELAY
     }
-  } else {
-    const configPath = existsSync('./src/config/config.json')
-      ? './src/config/config.json'
-      : './src/config/config-default.json'
-    const configJSON = readFileSync(configPath).toString()
-    try {
-      return JSON.parse(configJSON)
-    } catch (err) {
-      console.log(chalk.red('ERROR - config.json is empty or corrupted'))
-      console.log(chalk.red.italic('Use app.js config to save new configuration'))
-      return {}
+  }
+
+  //configuration for docker test environment
+  if (process.env.NODE_ENV === 'test') {
+    return {
+      submissionPath: './submit_files',
+      nmrDataPathManual: join(__dirname, '../tests/fixtures/data-manual'),
+      nmrDataPathAuto: join(__dirname, '../tests/fixtures/data-auto'),
+      instrumentId: '123-test-id',
+      serverAddress: 'test-server-url'
     }
+  }
+
+  //configuration for node.js production environment
+  const configPath = existsSync('./src/config/config.json')
+    ? './src/config/config.json'
+    : './src/config/config-default.json'
+  const configJSON = readFileSync(configPath).toString()
+  try {
+    return JSON.parse(configJSON)
+  } catch (err) {
+    console.log(chalk.red('ERROR - config.json is empty or corrupted'))
+    console.log(chalk.red.italic('Use app.js config to save new configuration'))
+    return {}
   }
 }
 
@@ -75,10 +90,16 @@ export const setConfig = list => {
           default: configObj.submissionPath
         },
         {
-          name: 'nmrDataPath',
+          name: 'nmrDataPathAuto',
           description: chalk.greenBright('Absolute path to IconNMR data folder'),
           type: 'string',
-          default: configObj.nmrDataPath
+          default: configObj.nmrDataPathAuto
+        },
+        {
+          name: 'nmrDataPathManual',
+          description: chalk.greenBright('Absolute path to manual NMR data folder'),
+          type: 'string',
+          default: configObj.nmrDataPathManual
         },
         {
           name: 'uploadDelay',

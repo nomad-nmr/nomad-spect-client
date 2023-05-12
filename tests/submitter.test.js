@@ -16,7 +16,7 @@ vi.mock('fs', async () => {
 it('should write submission file that deletes holders 5 and 6', () => {
   deleteExps('["5", "6"]')
   expect(writeFileSync).toHaveLastReturnedWith(
-    '\n  HOLDER 5\n  DELETE\n      \n  HOLDER 6\n  DELETE\n      \n  END'
+    '\nHOLDER 5\nDELETE\n      \nHOLDER 6\nDELETE\n      \nEND'
   )
 })
 

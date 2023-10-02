@@ -107,7 +107,7 @@ const tracker = (verbose, save) => {
     console.log(chalk.greenBright(`Tracker watching ${statusPath}`))
     console.log(chalk.cyan.italic('Press Ctrl+C any time to quit'))
   } else {
-    console.log(red.inverse('   Status file path is invalid   '))
+    console.log(chalk.red.inverse('   Status file path is invalid   '))
   }
 
   if (statusPath !== historyPath && existsSync(historyPath) && save) {

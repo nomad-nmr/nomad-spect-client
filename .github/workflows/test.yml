@@ -1,0 +1,16 @@
+name: Test API
+on:
+  push:
+  pull_request:
+    types:
+      - opened
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Running tests
+        run: npm run test-action

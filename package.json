@@ -7,6 +7,7 @@
   "scripts": {
     "test": "vitest --reporter verbose",
     "coverage": "vitest run --coverage",
+    "test-action": "vitest --run",
     "start": "node ./src/app.js run",
     "config": "node ./src/app.js config",
     "list": "node ./src/app.js config -l",

@@ -85,7 +85,7 @@ export const setConfig = list => {
         },
         {
           name: 'submissionPath',
-          description: chalk.greenBright('Relative to submission folder'),
+          description: chalk.greenBright('Relative path to submission folder'),
           type: 'string',
           default: configObj.submissionPath
         },

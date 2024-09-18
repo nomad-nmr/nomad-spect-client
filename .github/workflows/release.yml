@@ -8,6 +8,7 @@ jobs:
     name: Run automatic tests
     uses: ./.github/workflows/test.yml
   github-releases-to-discord:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

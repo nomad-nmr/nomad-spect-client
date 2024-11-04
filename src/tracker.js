@@ -1,18 +1,13 @@
 import { constants, readFileSync, copyFileSync, existsSync, watchFile, mkdirSync } from 'fs'
 import { Tabletojson as tableToJSON } from 'tabletojson'
 import chalk from 'chalk'
-import axios from 'axios'
+import axios from './axios-instance.js'
 
 import { readConfig } from './config.js'
 const { COPYFILE_EXCL } = constants
 
 const configFile = readConfig()
 const { instrumentId, statusPath, historyPath } = configFile
-let { serverAddress } = configFile
-
-if (process.env.NODE_ENV !== 'dev' && process.env.NODE_ENV !== 'docker-dev') {
-  serverAddress += '/api'
-}
 
 const statusFileHandler = verbose => {
   if (verbose) {
@@ -29,7 +24,7 @@ const statusFileHandler = verbose => {
     }
 
     axios
-      .patch(serverAddress + '/tracker/status', statusObj)
+      .patch('/tracker/status', statusObj)
       .then(res => {
         if (verbose) {
           if (res.status === 201) {
@@ -77,7 +72,7 @@ const saveHistoryHandler = () => {
 
 const tracker = (verbose, save) => {
   axios
-    .get(serverAddress + '/tracker/ping/' + instrumentId)
+    .get('/tracker/ping/' + instrumentId)
     .then(res => {
       if (res.status === 200) {
         console.log(chalk.greenBright(`Instrument ${res.data.name} is connected to the server`))

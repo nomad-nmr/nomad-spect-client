@@ -1,9 +1,9 @@
 import { it, expect, vi, describe } from 'vitest'
-import axios from 'axios'
+import axios from '../src/axios-instance.js'
 
 import { uploadDataManual, uploadDataAuto } from '../src/uploader.js'
 
-vi.mock('axios')
+vi.mock('../src/axios-instance.js')
 
 axios.post.mockImplementation((...args) => Promise.resolve({ status: 200, url: args[0] }))
 
@@ -15,7 +15,7 @@ describe('uploadDataAuto', () => {
 
     expect(axios.post).toHaveReturnedWith({
       status: 200,
-      url: 'test-server-url/data/auto/123-test-id'
+      url: '/data/auto/123-test-id'
     })
   })
 })
@@ -28,7 +28,7 @@ describe('uploadDataManual', () => {
 
     expect(axios.post).toHaveReturnedWith({
       status: 200,
-      url: 'test-server-url/data/manual/123-test-id'
+      url: '/data/manual/123-test-id'
     })
   })
 })

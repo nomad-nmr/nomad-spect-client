@@ -2,7 +2,7 @@ import { join } from 'path'
 
 import chalk from 'chalk'
 import FormData from 'form-data'
-import axios from 'axios'
+import axios from './axios-instance.js'
 
 import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
@@ -36,7 +36,7 @@ export const uploadDataAuto = async (payload, verbose) => {
     form.append('dataType', 'auto')
     form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
-    const response = await axios.post(serverAddress + '/data/auto/' + instrumentId, form, {
+    const response = await axios.post('/data/auto/' + instrumentId, form, {
       headers: { ...form.getHeaders() },
       maxContentLength: 100000000,
       maxBodyLength: 1000000000
@@ -46,6 +46,7 @@ export const uploadDataAuto = async (payload, verbose) => {
       console.timeEnd('upload')
     }
   } catch (error) {
+    console.log(error)
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
   }
 }
@@ -89,7 +90,7 @@ export const uploadDataManual = async (payload, verbose) => {
         form.append('dateCreated', expNoStats.ctime.toISOString())
         form.append('nmrData', zippedNMRData, 'nmrData.zip')
 
-        const response = await axios.post(serverAddress + '/data/manual/' + instrumentId, form, {
+        const response = await axios.post('/data/manual/' + instrumentId, form, {
           headers: { ...form.getHeaders() },
           maxContentLength: 100000000,
           maxBodyLength: 1000000000
@@ -102,7 +103,6 @@ export const uploadDataManual = async (payload, verbose) => {
     )
     console.timeEnd('upload-m')
   } catch (error) {
-    console.log(error)
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
   }
 }

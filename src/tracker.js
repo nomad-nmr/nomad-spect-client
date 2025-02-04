@@ -1,4 +1,12 @@
-import { constants, readFileSync, copyFileSync, existsSync, watchFile, mkdirSync } from 'fs'
+import {
+  constants,
+  readFileSync,
+  copyFileSync,
+  existsSync,
+  watchFile,
+  mkdirSync,
+  writeFileSync
+} from 'fs'
 import { Tabletojson as tableToJSON } from 'tabletojson'
 import chalk from 'chalk'
 import axios from './axios-instance.js'
@@ -23,6 +31,9 @@ const statusFileHandler = verbose => {
       data: tableToJSON.convert(statusHTML)
     }
 
+    // console.log(statusObj)
+    // writeFileSync('/app/status_files/status.json', JSON.stringify(statusObj))
+
     axios
       .patch('/tracker/status', statusObj)
       .then(res => {
@@ -38,19 +49,6 @@ const statusFileHandler = verbose => {
       .catch(err => {
         console.log(chalk.red('[Server Error]', err))
       })
-
-    // if (process.env.TEST_URL && process.env.TEST_INSTR_ID) {
-    //   const testStatusObj = { ...statusObj, instrumentId: process.env.TEST_INSTR_ID }
-    //   patch(process.env.TEST_URL + '/api/tracker/status', testStatusObj)
-    //     .then(res => {
-    //       if (res.status === 201) {
-    //         console.log(chalk.greenBright('Test server was updated'))
-    //       }
-    //     })
-    //     .catch(err => {
-    //       console.log(chalk.red('[Test Server Error]', err))
-    //     })
-    // }
   } catch (err) {
     console.log(err)
   }

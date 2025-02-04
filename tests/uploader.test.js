@@ -5,7 +5,7 @@ import { uploadDataManual, uploadDataAuto } from '../src/uploader.js'
 
 vi.mock('../src/axios-instance.js')
 
-axios.post.mockImplementation((...args) => Promise.resolve({ status: 200, url: args[0] }))
+axios.post.mockImplementation((...args) => ({ status: 200, url: args[0] }))
 
 describe('uploadDataAuto', () => {
   it('should call axios.post to send multipart-form-data to /data/auto/ API endpoint', async () => {

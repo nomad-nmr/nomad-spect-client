@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { readdir } from 'fs/promises'
 
 import chalk from 'chalk'
 import FormData from 'form-data'
@@ -8,8 +9,7 @@ import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
 import { parseMetaData } from './claimManual/getFolders.js'
 
-const { instrumentId, nmrDataPathAuto, serverAddress, uploadDelay, nmrDataPathManual } =
-  readConfig()
+const { instrumentId, nmrDataPathAuto, uploadDelay, nmrDataPathManual } = readConfig()
 
 export const uploadDataAuto = async (payload, verbose) => {
   const { datasetName, expNo, group } = JSON.parse(payload)
@@ -52,7 +52,7 @@ export const uploadDataAuto = async (payload, verbose) => {
 }
 
 export const uploadDataManual = async (payload, verbose) => {
-  const { userId, group, expsArr, claimId } = JSON.parse(payload)
+  const { userId, group, expsArr, claimId, sampleManager } = JSON.parse(payload)
 
   try {
     console.time('upload-m')
@@ -102,7 +102,17 @@ export const uploadDataManual = async (payload, verbose) => {
       })
     )
     console.timeEnd('upload-m')
+    if (sampleManager) {
+      console.log(payload)
+      const datasetName = expsArr[0].split('#-#')[0]
+      const dataFolderPath = join(nmrDataPathManual, group, 'nmr', datasetName)
+      const sampleManagerFiles = (await readdir(dataFolderPath, { withFileTypes: true })).filter(
+        dirent => !dirent.isDirectory() && dirent.name.endsWith('.json')
+      )
+      console.log(sampleManagerFiles)
+    }
   } catch (error) {
+    console.log(error)
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
   }
 }

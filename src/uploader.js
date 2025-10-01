@@ -1,5 +1,4 @@
 import { join } from 'path'
-import { readdir } from 'fs/promises'
 
 import chalk from 'chalk'
 import FormData from 'form-data'
@@ -102,17 +101,11 @@ export const uploadDataManual = async (payload, verbose) => {
       })
     )
     console.timeEnd('upload-m')
+
     if (sampleManager) {
-      console.log(payload)
-      const datasetName = expsArr[0].split('#-#')[0]
-      const dataFolderPath = join(nmrDataPathManual, group, 'nmr', datasetName)
-      const sampleManagerFiles = (await readdir(dataFolderPath, { withFileTypes: true })).filter(
-        dirent => !dirent.isDirectory() && dirent.name.endsWith('.json')
-      )
-      console.log(sampleManagerFiles)
+      console.log(sampleManager)
     }
   } catch (error) {
-    console.log(error)
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
   }
 }

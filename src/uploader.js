@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { readFile, readdir } from 'fs/promises'
 
 import chalk from 'chalk'
 import FormData from 'form-data'
@@ -103,10 +104,34 @@ export const uploadDataManual = async (payload, verbose) => {
     console.timeEnd('upload-m')
 
     if (sampleManager) {
-      console.log(sampleManager)
+      const datasetPath = join(nmrDataPathManual, group, 'nmr', expsArr[0].split('#-#')[0])
+
+      // Get all .json files in datasetPath and load their contents into sampleManagerData
+      let sampleManagerData = []
+      const files = await readdir(datasetPath)
+      const jsonFiles = files.filter(f => f.endsWith('.json'))
+      sampleManagerData = await Promise.all(
+        jsonFiles.map(async file => {
+          const filePath = join(datasetPath, file)
+          const content = await readFile(filePath, 'utf8')
+          return JSON.parse(content)
+        })
+      )
+      // sampleManagerData now contains all parsed JSON objects from the folder
+
+      const response = await axios.post('/datasets/sample-manager/' + instrumentId, {
+        userId,
+        group,
+        expsArr,
+        sampleManagerData
+      })
+      if (response.status === 200 && verbose) {
+        console.log(chalk.green(`Sample Manager Upload Success!`))
+      }
     }
   } catch (error) {
     console.log(chalk.red('Data upload failed'), chalk.yellow(` [${new Date().toLocaleString()}]`))
+    console.log(error)
   }
 }
 

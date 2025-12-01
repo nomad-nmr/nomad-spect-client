@@ -31,6 +31,10 @@ export default async (data, cb) => {
           return
         }
 
+        const sampleManagerFile = (await readdir(datasetFolderPath, { withFileTypes: true })).find(
+          dirent => !dirent.isDirectory() && dirent.name.endsWith('.json')
+        )
+
         await Promise.all(
           expNoArr.map(async expNo => {
             const expNoFolderPath = join(datasetFolderPath, expNo)
@@ -56,7 +60,8 @@ export default async (data, cb) => {
           datasetName: folder,
           date: folderStats.ctime.toISOString(),
           exps,
-          key: folder
+          key: folder,
+          sampleManager: sampleManagerFile ? true : false
         })
       })
     )

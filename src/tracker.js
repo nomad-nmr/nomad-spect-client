@@ -74,7 +74,6 @@ const tracker = (verbose, save) => {
     .then(res => {
       if (res.status === 200) {
         console.log(chalk.greenBright(`Instrument ${res.data.name} is connected to the server`))
-        statusFileHandler(verbose)
       }
     })
     .catch(err => {
@@ -87,7 +86,8 @@ const tracker = (verbose, save) => {
       )
     })
 
-  if (existsSync(statusPath)) {
+  if (statusPath && existsSync(statusPath)) {
+    statusFileHandler(verbose)
     watchFile(statusPath, () => {
       if (save) {
         if (!existsSync('./status-save/')) {
@@ -100,7 +100,7 @@ const tracker = (verbose, save) => {
     console.log(chalk.greenBright(`Tracker watching ${statusPath}`))
     console.log(chalk.cyan.italic('Press Ctrl+C any time to quit'))
   } else {
-    console.log(chalk.red.inverse('   Status file path is invalid   '))
+    console.log(chalk.red.inverse('   Status file path is invalid or not defined   '))
   }
 
   if (statusPath !== historyPath && existsSync(historyPath) && save) {

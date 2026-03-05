@@ -1,6 +1,9 @@
 {
-	"instrumentId": "5faa91d480f4922270d0d120",
 	"statusPath": "./status_files/status.html",
 	"historyPath": "./status_files/status.html",
-	"serverAddress": "localhost:8080"
+	"serverAddress": "https://nomad.my-uni.ac.uk",
+	"submissionPath": "./submission_files/",
+	"nmrDataPathAuto": "c:\\Data-icon\\data\\",
+	"nmrDataPathManual": "c:\\Data-manual\\data\\",
+	"uploadDelay": 10000
 }

@@ -100,7 +100,11 @@ const tracker = (verbose, save) => {
     console.log(chalk.greenBright(`Tracker watching ${statusPath}`))
     console.log(chalk.cyan.italic('Press Ctrl+C any time to quit'))
   } else {
-    console.log(chalk.red.inverse('   Status file path is invalid or not defined   '))
+    console.log(
+      chalk.red.inverse(
+        '   Status file path is invalid or not defined  - Check IconNMR configuration   '
+      )
+    )
   }
 
   if (statusPath !== historyPath && existsSync(historyPath) && save) {

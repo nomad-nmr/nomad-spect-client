@@ -39,9 +39,8 @@ export default async (data, cb) => {
           expNoArr.map(async expNo => {
             const expNoFolderPath = join(datasetFolderPath, expNo)
 
-            const { title, solvent, pulseProgram, expNoStats, procsStats } = await parseMetaData(
-              expNoFolderPath
-            )
+            const { title, solvent, pulseProgram, expNoStats, procsStats } =
+              await parseMetaData(expNoFolderPath)
 
             if (procsStats) {
               exps.push({
@@ -96,6 +95,7 @@ export const parseMetaData = async expNoFolderPath => {
     await access(titlePath)
     title = await readFile(titlePath, 'utf-8')
   } catch (error) {
+    title = '- no title -'
     console.log(error)
   }
 

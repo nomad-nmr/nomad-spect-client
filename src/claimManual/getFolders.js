@@ -3,10 +3,10 @@ import { readdir, stat, access, readFile } from 'fs/promises'
 
 import { readConfig } from '../config.js'
 
-const { nmrDataPathManual } = readConfig()
+const { nmrDataPathManual, nmrSubfolderManual } = readConfig()
 
 export default async (data, cb) => {
-  const groupFolderPath = join(nmrDataPathManual, data.group, 'nmr')
+  const groupFolderPath = join(nmrDataPathManual, data.group, nmrSubfolderManual)
 
   try {
     await access(groupFolderPath)

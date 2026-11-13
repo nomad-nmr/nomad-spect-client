@@ -9,7 +9,14 @@ import { readConfig } from './config.js'
 import zipDataFolder from './zipDataFolder.js'
 import { parseMetaData } from './claimManual/getFolders.js'
 
-const { instrumentId, nmrDataPathAuto, uploadDelay, nmrDataPathManual } = readConfig()
+const {
+  instrumentId,
+  nmrDataPathAuto,
+  uploadDelay,
+  nmrDataPathManual,
+  nmrSubfolderAuto,
+  nmrSubfolderManual
+} = readConfig()
 
 export const uploadDataAuto = async (payload, verbose) => {
   const { datasetName, expNo, group } = JSON.parse(payload)
@@ -24,7 +31,7 @@ export const uploadDataAuto = async (payload, verbose) => {
   try {
     console.time('upload')
 
-    const dataPath = join(nmrDataPathAuto, group, 'nmr', datasetName, expNo)
+    const dataPath = join(nmrDataPathAuto, group, nmrSubfolderAuto, datasetName, expNo)
 
     // file deepcode ignore PT: <Unclear why this is unsecure>
     const zippedNMRData = await zipDataFolder(dataPath)
@@ -68,7 +75,7 @@ export const uploadDataManual = async (payload, verbose) => {
           )
         }
 
-        const dataPath = join(nmrDataPathManual, group, 'nmr', datasetName, expNo)
+        const dataPath = join(nmrDataPathManual, group, nmrSubfolderManual, datasetName, expNo)
 
         const { title, solvent, pulseProgram, expNoStats } = await parseMetaData(dataPath)
 
@@ -104,7 +111,7 @@ export const uploadDataManual = async (payload, verbose) => {
     console.timeEnd('upload-m')
 
     if (sampleManager) {
-      const datasetPath = join(nmrDataPathManual, group, 'nmr', expsArr[0].split('#-#')[0])
+      const datasetPath = join(nmrDataPathManual, group, nmrSubfolderManual, expsArr[0].split('#-#')[0])
 
       // Get all .json files in datasetPath and load their contents into sampleManagerData
       let sampleManagerData = []

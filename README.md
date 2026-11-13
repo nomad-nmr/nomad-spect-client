@@ -10,3 +10,21 @@ Javascript app that runs on NMR spectrometer PC in Node.js runtime environment a
 - _npm run verbose_ - starts the app in verbose mode
 - _npm run save_ - starts app in saving mode when every status.html file gets saved
 - _npm run dev_ - starts the app in development mode. It communicates with API without reverse proxy.
+
+## Data folder layout
+
+By default the client expects NMR data in the classic IconNMR/TopSpin layout
+`<nmrDataPath>/<group>/nmr/<datasetName>/<expNo>`.
+
+If IconNMR is configured with *"Eliminate 'data' and 'nmr' from the data set path"*
+(TopSpin 3+), the data is stored as `<nmrDataPath>/<group>/<datasetName>/<expNo>`.
+Set the subfolder to empty (or `none`) to match:
+
+| config.json          | Docker env variable    | Default | Applies to                         |
+| -------------------- | ---------------------- | ------- | ---------------------------------- |
+| `nmrSubfolderAuto`   | `NMR_SUBFOLDER_AUTO`   | `nmr`   | IconNMR automation data upload     |
+| `nmrSubfolderManual` | `NMR_SUBFOLDER_MANUAL` | `nmr`   | Manual data claims and upload      |
+
+Use `npm run config` and type `none`, or edit `src/config/config.json` directly, e.g.
+`"nmrSubfolderAuto": "none"`. Missing settings default to `nmr`, so existing
+installations keep working without changes.

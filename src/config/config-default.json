@@ -5,5 +5,7 @@
 	"submissionPath": "./submission_files/",
 	"nmrDataPathAuto": "c:\\Data-icon\\data\\",
 	"nmrDataPathManual": "c:\\Data-manual\\data\\",
+	"nmrSubfolderAuto": "nmr",
+	"nmrSubfolderManual": "nmr",
 	"uploadDelay": 10000
 }
